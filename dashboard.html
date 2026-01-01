@@ -9,51 +9,40 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         body {
-            background-color: #050505;
-            /* Deep black-gray */
-            background-image:
-                radial-gradient(circle at 50% 0%, #0f172a 0%, #000 70%),
-                /* Dark Slate instead of Indigo */
-                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-            background-size: 100% 100%, 30px 30px, 30px 30px;
+            background-color: #000;
+            background: radial-gradient(circle at center, #0d1117 0%, #010409 100%);
             color: #e2e8f0;
-            /* Soft white */
             font-family: 'Inter', system-ui, sans-serif;
-            /* Cleaner font */
             overflow: hidden;
+            height: 100%;
+            width: 100%;
+        }
+
+        /* Subtle Grid from Landing Page */
+        .grid-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
         }
 
         .glass-card {
-            background: rgba(15, 23, 42, 0.4);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.4s ease;
         }
 
         .glass-card:hover {
-            background: rgba(30, 41, 59, 0.6);
+            background: rgba(255, 255, 255, 0.03);
             border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-            /* Removed heavy glow */
-        }
-
-        .hud-text {
-            /* Removed neon text shadow for better readability */
-            letter-spacing: -0.05em;
-        }
-
-        /* Scanline effect */
-        .scanline {
-            width: 100%;
-            height: 100px;
-            z-index: 10;
-            background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(59, 130, 246, 0.1) 50%, rgba(0, 0, 0, 0) 100%);
-            opacity: 0.1;
-            position: absolute;
-            bottom: 100%;
-            animation: scanline 10s linear infinite;
-            pointer-events: none;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
         }
 
         @keyframes scanline {
@@ -70,7 +59,7 @@
 
 <body class="flex items-center justify-center h-screen relative">
 
-    <div class="scanline"></div>
+    <div class="grid-overlay"></div>
 
     <!-- Main Container -->
     <div class="max-w-6xl w-full p-8 z-20">
