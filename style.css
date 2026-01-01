@@ -7,18 +7,19 @@
     --climate-cyan: #39c5bb;
     --edtech-purple: #a371f7;
     /* Added for EdTech */
-    --glass-bg: rgba(13, 17, 23, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.1);
+    /* Added for EdTech */
+    --glass-bg: rgba(30, 41, 59, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.15);
     --neon-glow: 0 0 10px rgba(47, 129, 247, 0.5);
 }
 
 body {
     margin: 0;
     overflow: hidden;
-    background-color: #010409;
+    background-color: #0f172a;
     color: #e6edf3;
     font-family: 'Space Grotesk', sans-serif;
-    background: radial-gradient(circle at center, #0d1117 0%, #010409 100%);
+    background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
 }
 
 canvas {
@@ -92,10 +93,10 @@ canvas {
     gap: 1.5rem;
     border: 1px solid var(--glass-border);
     border-radius: 30px;
-    background: rgba(1, 4, 9, 0.6);
+    background: rgba(15, 23, 42, 0.75);
     backdrop-filter: blur(15px);
     z-index: 100;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 }
 
 .nav-icon {

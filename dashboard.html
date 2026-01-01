@@ -9,40 +9,51 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         body {
-            background-color: #000;
-            background: radial-gradient(circle at center, #0d1117 0%, #010409 100%);
-            color: #e2e8f0;
-            font-family: 'Inter', system-ui, sans-serif;
-            overflow: hidden;
-            height: 100%;
-            width: 100%;
-        }
-
-        /* Subtle Grid from Landing Page */
-        .grid-overlay {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
+            background-color: #0f172a;
+            /* Dark Slate */
             background-image:
+                radial-gradient(circle at 50% 0%, #1e293b 0%, #0f172a 70%),
+                /* Lighter Slate Gradient */
                 linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
-            pointer-events: none;
-            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+            background-size: 100% 100%, 30px 30px, 30px 30px;
+            color: #e2e8f0;
+            /* Soft white */
+            font-family: 'Inter', system-ui, sans-serif;
+            /* Cleaner font */
+            overflow: hidden;
         }
 
         .glass-card {
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: all 0.4s ease;
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
         }
 
         .glass-card:hover {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(30, 41, 59, 0.6);
             border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-4px);
-            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+            transform: translateY(-2px);
+            /* Removed heavy glow */
+        }
+
+        .hud-text {
+            /* Removed neon text shadow for better readability */
+            letter-spacing: -0.05em;
+        }
+
+        /* Scanline effect */
+        .scanline {
+            width: 100%;
+            height: 100px;
+            z-index: 10;
+            background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(59, 130, 246, 0.1) 50%, rgba(0, 0, 0, 0) 100%);
+            opacity: 0.1;
+            position: absolute;
+            bottom: 100%;
+            animation: scanline 10s linear infinite;
+            pointer-events: none;
         }
 
         @keyframes scanline {
@@ -59,7 +70,7 @@
 
 <body class="flex items-center justify-center h-screen relative">
 
-    <div class="grid-overlay"></div>
+    <div class="scanline"></div>
 
     <!-- Main Container -->
     <div class="max-w-6xl w-full p-8 z-20">
@@ -81,7 +92,7 @@
         </div>
 
         <!-- Modules Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
             <!-- Module 1: Agri-Intelligence -->
             <a href="land.html" class="glass-card rounded-2xl p-8 group relative overflow-hidden block">
@@ -155,6 +166,31 @@
                 <!-- Hover Glow -->
                 <div
                     class="absolute -bottom-10 -right-10 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl group-hover:bg-purple-500/40 transition-all">
+                </div>
+            </a>
+
+            <!-- Module 4: Solar Simulation -->
+            <a href="spaceinfo.html" class="glass-card rounded-2xl p-8 group relative overflow-hidden block">
+                <div class="absolute top-0 right-0 p-4 opacity-50">
+                    <i data-lucide="orbit"
+                        class="w-12 h-12 text-slate-700 group-hover:text-orange-500 transition-colors"></i>
+                </div>
+                <div class="relative z-10">
+                    <div
+                        class="w-12 h-12 rounded-lg bg-orange-500/10 flex items-center justify-center mb-6 border border-orange-500/20 group-hover:bg-orange-500/20 group-hover:border-orange-500/50 transition-all">
+                        <i data-lucide="sun" class="w-6 h-6 text-orange-400"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-white mb-2">Solar System</h2>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6">Interactive 3D simulation of our solar
+                        neighborhood. Track orbits and planetary data.</p>
+                    <div class="flex items-center gap-2 text-orange-400 text-xs font-bold uppercase tracking-widest">
+                        <span>Access Module</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+                <!-- Hover Glow -->
+                <div
+                    class="absolute -bottom-10 -right-10 w-40 h-40 bg-orange-500/20 rounded-full blur-3xl group-hover:bg-orange-500/40 transition-all">
                 </div>
             </a>
 

@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="style.css">
     <style>
         /* CRITICAL FIX: Ensure full height so background renders */
         html,
@@ -20,9 +20,9 @@
             overflow-x: hidden;
             overflow-y: auto;
             /* Enable vertical scroll */
-            background-color: #000;
-            /* Force Black */
-            background: radial-gradient(circle at center, #0d1117 0%, #010409 100%);
+            background-color: #0f172a;
+            /* Force Slate-900 */
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
         }
 
         #ui-layer {
@@ -64,7 +64,8 @@
             z-index: 20;
             margin-top: 100vh;
             /* Start below the fold */
-            background: linear-gradient(to bottom, transparent 0%, rgba(13, 17, 23, 0.95) 20%, #0d1117 100%);
+            /* Start below the fold */
+            background: linear-gradient(to bottom, transparent 0%, rgba(30, 41, 59, 0.95) 20%, #0f172a 100%);
             min-height: 100vh;
             padding-top: 100px;
             padding-bottom: 100px;
@@ -97,7 +98,7 @@
         <div class="pointer-events-auto max-w-xl">
             <!-- Glass Card -->
             <div
-                class="bg-black/40 backdrop-blur-xl border-l-4 border-blue-500 p-8 rounded-r-3xl border-y border-r border-white/5 relative overflow-hidden group">
+                class="bg-slate-900/60 backdrop-blur-xl border-l-4 border-blue-500 p-8 rounded-r-3xl border-y border-r border-white/10 relative overflow-hidden group">
                 <div
                     class="absolute top-0 right-0 w-20 h-20 bg-blue-500/10 rounded-full blur-2xl -mr-10 -mt-10 transition-all group-hover:bg-blue-500/20">
                 </div>
@@ -172,7 +173,7 @@
 
                 <!-- Card 1: Mapping -->
                 <div
-                    class="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition-all hover:-translate-y-1 duration-300 group cursor-default">
+                    class="bg-white/10 backdrop-blur-md border border-white/10 p-6 rounded-2xl hover:bg-white/20 transition-all hover:-translate-y-1 duration-300 group cursor-default">
                     <div
                         class="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-blue-500/20 transition-colors">
                         <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -188,7 +189,7 @@
 
                 <!-- Card 2: AI -->
                 <div
-                    class="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition-all hover:-translate-y-1 duration-300 group cursor-default">
+                    class="bg-white/10 backdrop-blur-md border border-white/10 p-6 rounded-2xl hover:bg-white/20 transition-all hover:-translate-y-1 duration-300 group cursor-default">
                     <div
                         class="w-12 h-12 bg-purple-500/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-purple-500/20 transition-colors">
                         <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -203,7 +204,7 @@
 
                 <!-- Card 3: Climate -->
                 <div
-                    class="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition-all hover:-translate-y-1 duration-300 group cursor-default">
+                    class="bg-white/10 backdrop-blur-md border border-white/10 p-6 rounded-2xl hover:bg-white/20 transition-all hover:-translate-y-1 duration-300 group cursor-default">
                     <div
                         class="w-12 h-12 bg-cyan-500/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-cyan-500/20 transition-colors">
                         <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -219,7 +220,7 @@
 
                 <!-- Card 4: History -->
                 <div
-                    class="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition-all hover:-translate-y-1 duration-300 group cursor-default">
+                    class="bg-white/10 backdrop-blur-md border border-white/10 p-6 rounded-2xl hover:bg-white/20 transition-all hover:-translate-y-1 duration-300 group cursor-default">
                     <div
                         class="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-emerald-500/20 transition-colors">
                         <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
