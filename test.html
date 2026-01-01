@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioFarm AI - Precision Mapper</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+            z-index: 0;
+        }
+
+        /* Floating HUD styling */
+        .glass-hud {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        /* Custom scrollbar */
+        .custom-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+
+        /* Left Sidebar Slide Animation */
+        #left-sidebar {
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 2000;
+        }
+
+        .sidebar-hidden {
+            transform: translateX(-100%);
+        }
+
+        .sidebar-visible {
+            transform: translateX(0);
+        }
+
+        /* Fix Leaflet Control Positioning to avoid overlaps */
+        .leaflet-top.leaflet-right {
+            margin-top: 80px;
+        }
+
+        /* Leaflet Control Customization */
+        .leaflet-draw-toolbar a {
+            background-color: rgba(15, 23, 42, 0.9) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+        }
+
+        .leaflet-draw-toolbar a:hover {
+            background-color: #10b981 !important;
+        }
+
+        .leaflet-bar {
+            border: none !important;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-900 flex flex-col h-screen">
+
+    <!-- Header Overlay (Floating) -->
+    <header class="absolute top-4 left-4 right-4 flex justify-between items-center z-[1001] pointer-events-none">
+        <!-- Logo Section -->
+        <div class="flex items-center gap-3 glass-hud p-3 px-5 rounded-2xl pointer-events-auto">
+            <div class="bg-emerald-500 p-2 rounded-xl shadow-lg shadow-emerald-500/20">
+                <i data-lucide="sprout" class="text-white"></i>
+            </div>
+            <div class="hidden sm:block">
+                <h1 class="text-lg font-bold text-white tracking-tight leading-none">BioFarm AI</h1>
+                <p class="text-[10px] text-emerald-400 font-medium uppercase tracking-widest mt-1">Satellite Precision
+                </p>
+            </div>
+        </div>
+
+        <!-- Action Buttons Section -->
+        <div class="flex gap-2 pointer-events-auto">
+            <button id="show-sidebar-btn"
+                class="hidden flex items-center gap-2 glass-hud hover:bg-slate-800 px-3 py-2 rounded-xl text-emerald-400 text-sm font-medium transition-all">
+                <i data-lucide="layout-panel-left" size="16"></i> <span class="hidden sm:inline">Show Report</span>
+            </button>
+            <button id="reset-btn"
+                class="flex items-center gap-2 glass-hud hover:bg-slate-800 px-3 py-2 sm:px-4 rounded-xl text-white text-sm font-medium transition-all">
+                <i data-lucide="refresh-cw" size="16"></i> <span class="hidden sm:inline">Clear</span>
+            </button>
+            <button id="analyze-btn" disabled
+                class="flex items-center gap-2 px-4 py-2 sm:px-6 rounded-xl text-sm font-bold shadow-xl transition-all bg-emerald-500 hover:bg-emerald-400 text-white disabled:bg-slate-700 disabled:text-slate-500 disabled:cursor-not-allowed">
+                <i data-lucide="zap" size="16"></i>
+                <span id="analyze-text">Analyze Field</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Sidebar Slide-in Panel -->
+    <aside id="left-sidebar"
+        class="absolute top-0 left-0 h-full w-80 sidebar-hidden glass-hud border-r border-white/10 flex flex-col">
+        <div class="p-6 pt-24 flex-1 flex flex-col overflow-hidden">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xs font-black text-emerald-400 uppercase tracking-widest flex items-center gap-2">
+                    <i data-lucide="cpu" size="14"></i> Site Analysis
+                </h2>
+                <button id="close-sidebar" class="text-slate-400 hover:text-white transition-colors">
+                    <i data-lucide="chevron-left"></i>
+                </button>
+            </div>
+
+            <!-- Tab Switcher -->
+            <div class="flex gap-2 mb-4 p-1 bg-black/20 rounded-lg">
+                <button id="tab-current"
+                    class="flex-1 text-[10px] font-bold uppercase py-1 rounded-md bg-emerald-500 text-white transition-all">Current</button>
+                <button id="tab-history"
+                    class="flex-1 text-[10px] font-bold uppercase py-1 rounded-md text-slate-400 hover:text-white transition-all">History</button>
+            </div>
+
+            <div id="sidebar-report" class="space-y-6 overflow-y-auto custom-scroll pr-2 mb-6">
+                <!-- Analysis Data injected here -->
+                <p class="text-slate-500 text-xs italic text-center mt-10">Run an analysis to see data here.</p>
+            </div>
+
+            <div id="sidebar-history" class="hidden space-y-4 overflow-y-auto custom-scroll pr-2 mb-6">
+                <!-- History items injected here -->
+            </div>
+
+            <!-- Chat Interface -->
+            <div class="mt-auto border-t border-white/10 pt-4">
+                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2">Ask AI Assistant</p>
+                <div id="chat-box"
+                    class="h-32 bg-black/20 rounded-xl mb-3 overflow-y-auto p-3 text-[11px] text-slate-300 space-y-2 custom-scroll">
+                    <div class="bg-white/5 p-2 rounded-lg">AI: Field analysis complete. How can I assist with your crop
+                        strategy today?</div>
+                </div>
+                <div class="relative">
+                    <input type="text" id="chat-input" placeholder="Type a question..."
+                        class="w-full bg-slate-800/50 border border-white/10 rounded-xl py-2 px-3 pr-10 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-emerald-500/50">
+                    <button id="send-chat" class="absolute right-2 top-1.5 text-emerald-500 hover:text-emerald-400">
+                        <i data-lucide="send" size="16"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Map Area -->
+    <main class="flex-1 relative">
+        <div id="map"></div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <script>
+        lucide.createIcons();
+
+        let mapInstance = null;
+        let drawnItems = null;
+
+        function initMap() {
+            const googleSatellite = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+                maxZoom: 21,
+                attribution: '&copy; Google'
+            });
+
+            mapInstance = L.map('map', {
+                zoomControl: false,
+                layers: [googleSatellite]
+            }).setView([20.5937, 78.9629], 5);
+
+            L.control.zoom({ position: 'bottomleft' }).addTo(mapInstance);
+
+            drawnItems = new L.FeatureGroup();
+            mapInstance.addLayer(drawnItems);
+
+            const drawControl = new L.Control.Draw({
+                position: 'topright',
+                draw: {
+                    polygon: {
+                        allowIntersection: false,
+                        showArea: true,
+                        shapeOptions: { color: '#10b981', fillOpacity: 0.2 }
+                    },
+                    rectangle: { shapeOptions: { color: '#10b981', fillOpacity: 0.2 } },
+                    circle: false,
+                    marker: true,
+                    circlemarker: false,
+                    polyline: false
+                },
+                edit: {
+                    featureGroup: drawnItems,
+                    remove: true
+                }
+            });
+            mapInstance.addControl(drawControl);
+
+            const LocateControl = L.Control.extend({
+                options: { position: 'topright' },
+                onAdd: function (map) {
+                    const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+                    container.innerHTML = `<a href="#" title="Locate Me" style="display:flex;align-items:center;justify-content:center;color:white;font-size:18px;">⌖</a>`;
+                    container.onclick = function (e) {
+                        e.preventDefault();
+                        if ("geolocation" in navigator) {
+                            navigator.geolocation.getCurrentPosition(pos => {
+                                map.flyTo([pos.coords.latitude, pos.coords.longitude], 18);
+                            });
+                        }
+                    }
+                    return container;
+                }
+            });
+            mapInstance.addControl(new LocateControl());
+
+            mapInstance.on(L.Draw.Event.CREATED, function (event) {
+                const layer = event.layer;
+                drawnItems.addLayer(layer);
+                updateUI();
+            });
+
+            mapInstance.on(L.Draw.Event.DELETED, updateUI);
+            loadHistory();
+        }
+
+        function updateUI() {
+            const count = drawnItems.getLayers().length;
+            document.getElementById('analyze-btn').disabled = count === 0;
+        }
+
+        // History Management
+        function saveToHistory(data) {
+            let history = JSON.parse(localStorage.getItem('biofarm_history') || '[]');
+            history.unshift({
+                timestamp: new Date().toLocaleString(),
+                ...data
+            });
+            // Keep last 10
+            if (history.length > 10) history.pop();
+            localStorage.setItem('biofarm_history', JSON.stringify(history));
+            loadHistory();
+        }
+
+        function loadHistory() {
+            const historyList = document.getElementById('sidebar-history');
+            const history = JSON.parse(localStorage.getItem('biofarm_history') || '[]');
+
+            if (history.length === 0) {
+                historyList.innerHTML = `<p class="text-slate-500 text-xs italic text-center mt-10">No history found.</p>`;
+                return;
+            }
+
+            historyList.innerHTML = history.map((item, idx) => `
+                <div class="bg-white/5 p-3 rounded-xl border border-white/5 space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[9px] text-emerald-400 font-bold uppercase">${item.timestamp}</span>
+                    </div>
+                    <div class="flex justify-between text-[11px]">
+                        <span class="text-slate-400">Nitrogen: <span class="text-white">${item.nitrogen}</span></span>
+                        <span class="text-slate-400">pH: <span class="text-white">${item.ph}</span></span>
+                    </div>
+                    <div class="text-[11px] text-slate-300 italic">Target: ${item.crop}</div>
+                </div>
+            `).join('');
+        }
+
+        // Tab Management
+        document.getElementById('tab-current').addEventListener('click', () => {
+            document.getElementById('tab-current').className = "flex-1 text-[10px] font-bold uppercase py-1 rounded-md bg-emerald-500 text-white transition-all";
+            document.getElementById('tab-history').className = "flex-1 text-[10px] font-bold uppercase py-1 rounded-md text-slate-400 hover:text-white transition-all";
+            document.getElementById('sidebar-report').classList.remove('hidden');
+            document.getElementById('sidebar-history').classList.add('hidden');
+        });
+
+        document.getElementById('tab-history').addEventListener('click', () => {
+            document.getElementById('tab-history').className = "flex-1 text-[10px] font-bold uppercase py-1 rounded-md bg-emerald-500 text-white transition-all";
+            document.getElementById('tab-current').className = "flex-1 text-[10px] font-bold uppercase py-1 rounded-md text-slate-400 hover:text-white transition-all";
+            document.getElementById('sidebar-history').classList.remove('hidden');
+            document.getElementById('sidebar-report').classList.add('hidden');
+        });
+
+        document.getElementById('analyze-btn').addEventListener('click', async () => {
+            const btnText = document.getElementById('analyze-text');
+            const analyzeBtn = document.getElementById('analyze-btn');
+            const sidebar = document.getElementById('left-sidebar');
+            const report = document.getElementById('sidebar-report');
+            const showSidebarBtn = document.getElementById('show-sidebar-btn');
+
+            analyzeBtn.disabled = true;
+            btnText.innerText = "Analyzing...";
+
+            await new Promise(r => setTimeout(r, 1500));
+
+            const mockN = ["High", "Optimal", "Deficient"][Math.floor(Math.random() * 3)];
+            const mockPH = (Math.random() * 1.5 + 5.5).toFixed(1);
+            const mockCrop = "Wheat (High Yield)";
+
+            const data = { nitrogen: mockN, ph: mockPH, crop: mockCrop };
+            saveToHistory(data);
+
+            report.innerHTML = `
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="bg-white/5 p-3 rounded-2xl border border-white/5">
+                        <p class="text-[9px] text-slate-400 uppercase font-bold">Nitrogen</p>
+                        <p class="text-sm font-bold text-white">${data.nitrogen}</p>
+                    </div>
+                    <div class="bg-white/5 p-3 rounded-2xl border border-white/5">
+                        <p class="text-[9px] text-slate-400 uppercase font-bold">Soil pH</p>
+                        <p class="text-sm font-bold text-emerald-400">${data.ph}</p>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">NDVI Health</p>
+                    <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                        <div class="bg-emerald-500 h-full w-[78%]"></div>
+                    </div>
+                    <p class="text-[11px] text-slate-300">Vegetation density is currently at 78%, showing robust growth patterns.</p>
+                </div>
+
+                <div class="space-y-2">
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">AI Strategy</p>
+                    <div class="flex items-center gap-3 bg-white/5 p-3 rounded-xl border border-white/5">
+                        <div class="bg-emerald-500/20 p-2 rounded-lg text-emerald-400">
+                            <i data-lucide="check-circle" size="14"></i>
+                        </div>
+                        <span class="text-xs font-bold text-white">Suggested: ${data.crop}</span>
+                    </div>
+                </div>
+            `;
+
+            sidebar.classList.remove('sidebar-hidden');
+            sidebar.classList.add('sidebar-visible');
+            showSidebarBtn.classList.remove('hidden');
+
+            btnText.innerText = "Analyze Field";
+            lucide.createIcons();
+        });
+
+        document.getElementById('show-sidebar-btn').addEventListener('click', () => {
+            const sidebar = document.getElementById('left-sidebar');
+            sidebar.classList.remove('sidebar-hidden');
+            sidebar.classList.add('sidebar-visible');
+        });
+
+        document.getElementById('close-sidebar').addEventListener('click', () => {
+            const sidebar = document.getElementById('left-sidebar');
+            sidebar.classList.add('sidebar-hidden');
+            sidebar.classList.remove('sidebar-visible');
+        });
+
+        document.getElementById('reset-btn').addEventListener('click', () => {
+            drawnItems.clearLayers();
+            const sidebar = document.getElementById('left-sidebar');
+            const showSidebarBtn = document.getElementById('show-sidebar-btn');
+            sidebar.classList.add('sidebar-hidden');
+            sidebar.classList.remove('sidebar-visible');
+            showSidebarBtn.classList.add('hidden');
+            updateUI();
+        });
+
+        window.onload = initMap;
+    </script>
+</body>
+
+</html>
