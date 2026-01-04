@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xiaomi Proxy Setup Helper</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-900 text-white min-h-screen p-8">
+    <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-emerald-400 mb-2">🚀 Xiaomi API Setup</h1>
+            <p class="text-slate-400">Get your proxy running in 3 easy steps</p>
+        </div>
+
+        <!-- Method Cards -->
+        <div class="grid md:grid-cols-3 gap-6 mb-8">
+            <!-- Method 1 -->
+            <div class="bg-slate-800 rounded-2xl p-6 border border-emerald-500/30">
+                <div class="w-12 h-12 bg-emerald-500/20 rounded-full flex items-center justify-center mb-4">
+                    <i data-lucide="zap" class="w-6 h-6 text-emerald-400"></i>
+                </div>
+                <h3 class="text-lg font-bold mb-2">Method 1: Direct</h3>
+                <p class="text-sm text-slate-400 mb-4">Try the direct API call first (already enabled in the app)</p>
+                <div class="bg-black/30 p-3 rounded-lg">
+                    <p class="text-xs text-emerald-400 font-mono">Just click "Analyze Field"!</p>
+                </div>
+            </div>
+
+            <!-- Method 2 -->
+            <div class="bg-slate-800 rounded-2xl p-6 border border-blue-500/30">
+                <div class="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center mb-4">
+                    <i data-lucide="play" class="w-6 h-6 text-blue-400"></i>
+                </div>
+                <h3 class="text-lg font-bold mb-2">Method 2: Batch File</h3>
+                <p class="text-sm text-slate-400 mb-4">Double-click to start (Windows)</p>
+                <div class="bg-black/30 p-3 rounded-lg">
+                    <p class="text-xs text-blue-400 font-mono">start-proxy.bat</p>
+                </div>
+            </div>
+
+            <!-- Method 3 -->
+            <div class="bg-slate-800 rounded-2xl p-6 border border-purple-500/30">
+                <div class="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center mb-4">
+                    <i data-lucide="terminal" class="w-6 h-6 text-purple-400"></i>
+                </div>
+                <h3 class="text-lg font-bold mb-2">Method 3: Terminal</h3>
+                <p class="text-sm text-slate-400 mb-4">Run manually in command line</p>
+                <div class="bg-black/30 p-3 rounded-lg">
+                    <p class="text-xs text-purple-400 font-mono">node local-proxy.js</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step by Step -->
+        <div class="bg-slate-800 rounded-2xl p-8 border border-white/10 mb-8">
+            <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                <i data-lucide="list-checks" class="w-6 h-6 text-emerald-400"></i>
+                Step-by-Step Guide
+            </h2>
+            
+            <div class="space-y-6">
+                <div class="flex gap-4">
+                    <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center font-bold shrink-0">1</div>
+                    <div>
+                        <h3 class="font-bold mb-1">Choose Your Method</h3>
+                        <p class="text-sm text-slate-400">Try Method 1 first. If CORS errors appear, use Method 2 or 3.</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-4">
+                    <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center font-bold shrink-0">2</div>
+                    <div>
+                        <h3 class="font-bold mb-1">Start the Proxy (if needed)</h3>
+                        <p class="text-sm text-slate-400 mb-2">Double-click <code class="bg-black/40 px-2 py-1 rounded text-emerald-400">start-proxy.bat</code></p>
+                        <p class="text-xs text-slate-500">A terminal window will open. Keep it running!</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-4">
+                    <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center font-bold shrink-0">3</div>
+                    <div>
+                        <h3 class="font-bold mb-1">Use the App</h3>
+                        <p class="text-sm text-slate-400">Open land.html, select "Xiaomi Official", and click Analyze!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Troubleshooting -->
+        <div class="bg-red-900/20 border border-red-500/30 rounded-2xl p-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="alert-triangle" class="w-5 h-5 text-red-400"></i>
+                Troubleshooting
+            </h2>
+            
+            <div class="space-y-3 text-sm">
+                <div class="flex gap-3">
+                    <span class="text-red-400">❌</span>
+                    <div>
+                        <strong>Node.js not found?</strong>
+                        <p class="text-slate-400 text-xs">Install from <a href="https://nodejs.org" class="text-emerald-400 underline">nodejs.org</a></p>
+                    </div>
+                </div>
+
+                <div class="flex gap-3">
+                    <span class="text-red-400">❌</span>
+                    <div>
+                        <strong>Port 3001 already in use?</strong>
+                        <p class="text-slate-400 text-xs">Close other apps or restart your computer</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-3">
+                    <span class="text-emerald-400">✅</span>
+                    <div>
+                        <strong>Still having issues?</strong>
+                        <p class="text-slate-400 text-xs">Use OpenRouter instead - no setup required!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Proxy -->
+        <div class="mt-8 bg-slate-800 rounded-2xl p-6 border border-white/10">
+            <h2 class="text-xl font-bold mb-4">Test Your Proxy</h2>
+            <button id="testProxy" class="bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                Test Connection
+            </button>
+            <div id="testResult" class="mt-4 hidden"></div>
+        </div>
+
+        <div class="text-center mt-8">
+            <a href="land.html" class="inline-block bg-blue-500 hover:bg-blue-400 text-white font-bold py-3 px-8 rounded-lg transition-colors">
+                Open App →
+            </a>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        document.getElementById('testProxy').onclick = async () => {
+            const btn = document.getElementById('testProxy');
+            const result = document.getElementById('testResult');
+            
+            btn.disabled = true;
+            btn.textContent = 'Testing...';
+            result.classList.remove('hidden');
+            result.innerHTML = '<p class="text-slate-400">Connecting to proxy...</p>';
+
+            try {
+                const response = await fetch('http://localhost:3001/proxy/xiaomi', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'api-key': 'test'
+                    },
+                    body: JSON.stringify({ test: true })
+                });
+
+                if (response.status === 404) {
+                    result.innerHTML = `
+                        <div class="bg-red-900/20 border border-red-500/30 p-4 rounded-lg">
+                            <p class="text-red-400 font-bold">❌ Proxy Not Running</p>
+                            <p class="text-sm text-slate-400 mt-2">Start it using start-proxy.bat</p>
+                        </div>
+                    `;
+                } else {
+                    result.innerHTML = `
+                        <div class="bg-emerald-900/20 border border-emerald-500/30 p-4 rounded-lg">
+                            <p class="text-emerald-400 font-bold">✅ Proxy is Running!</p>
+                            <p class="text-sm text-slate-400 mt-2">Server responding on port 3001</p>
+                        </div>
+                    `;
+                }
+            } catch (e) {
+                result.innerHTML = `
+                    <div class="bg-red-900/20 border border-red-500/30 p-4 rounded-lg">
+                        <p class="text-red-400 font-bold">❌ Connection Failed</p>
+                        <p class="text-sm text-slate-400 mt-2">${e.message}</p>
+                        <p class="text-xs text-slate-500 mt-2">Make sure proxy is running: start-proxy.bat</p>
+                    </div>
+                `;
+            }
+
+            btn.disabled = false;
+            btn.textContent = 'Test Again';
+        };
+    </script>
+</body>
+</html>
